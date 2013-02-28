@@ -58,11 +58,11 @@ class activeCollab(object):
 
     """ Displays the properties of a specific company. """
     def get_company(self, company_id):
-        return self.call_api('people/%d' % company_id)
+        return self.call_api('people/%s' % company_id)
 
     """ Shows details of a specific user account. """
     def get_user(self, company_id, user_id):
-        return self.call_api('people/%d/users/%d' % (company_id, user_id))
+        return self.call_api('people/%s/users/%s' % (company_id, user_id))
 
     """ Display all, non-archived projects that this user has access to. In case
         of administrators and project managers, system will return all non-archived
@@ -84,7 +84,7 @@ class activeCollab(object):
 
     """ Shows properties of the specific project. """
     def get_project(self, project_id):
-        return self.call_api('projects/%d' % project_id)
+        return self.call_api('projects/%s' % project_id)
 
     """ Displays the list of people involved with the project and the
         permissions included in their Project Role. Project Permissions are
@@ -97,6 +97,77 @@ class activeCollab(object):
     """
     def get_project_people(self, project_slug):
         return self.call_api('projects/%s/people' % project_slug)
+
+    """ Tasks
+    Task fields:
+
+        name (string) - Task name. A value for this field is required when a Task is created,
+        body (text) - Full task description,
+        visibility (integer) - Object visibility. 0 is private and 1 is normal visibility,
+        category_id (integer) - Object category,
+        label_id (integer) - Object label,
+        milestone_id (integer) - ID of the parent milestone,
+        priority (integer) - Priority can have one of five integer values, ranging from -2 (lowest) to 2 (highest). 0 is normal,
+        assignee_id (integer) - User assigned to the Task,
+        other_assignees (array) - People assigned to the Task,
+        due_on (date) - Task due date,``
+    """
+
+    """ Lists all open and completed, non-archived tasks from a project.
+        project_slug can be a project ID.
+    """
+    def get_project_tasks(self, project_slug):
+        return self.call_api('/projects/%s/tasks' % project_slug)
+
+    """ Displays all archived tasks from this project.
+        project_slug can be a project ID.
+    """
+    def get_archived_project_tasks(self, project_slug):
+        return self.call_api('/projects/%s/tasks/archive' % project_slug)
+
+    """ Displays details for a specific task. """
+    def get_task(self, project_slug, task_id):
+        return self.call_api('/projects/%s/tasks/%s' % (project_slug, task_id))
+
+    """ discussions
+        Discussion fields:
+
+        name (string) - Discussion topic. This field is required when topic is created,
+        body (string) - First message body (required),
+        category_id (integer) - Discussion category id,
+        visibility (integer) - Discussion visibility. 0 is private and 1 is normal visibility,
+        milestone_id (integer) - ID of parent milestone.
+    """
+
+    """ Displays all non-archived discussions in a project. """
+    def get_discussions(self, project_slug):
+        return self.call_api('/projects/%s/discussions')
+
+    """ Display discussion details. """
+    def get_discussion(self, project_slug, discussion_id):
+        return self.call_api('/projects/%s/discussions/%s' % (project_slug, discussion_id))
+
+    """ Lists the 50 most recent status messages. """
+    def get_status_messages(self):
+        return self.call_api('status')
+
+    """ Subtasks
+        List of available subtask fields:
+
+        body (text) - The subtasktask name. A value for this field is required when a new task is added;
+        assignee (integer) - Person assigned to the object.
+        priority (integer) - Priority can have five integer values ranging from -2 (lowest) to 2 (highest). 0 is normal;
+        label_id (date) - Label id of the subtask;
+        due_on (date) - When the subtask is due;
+    """
+
+    """ Displays all subtasks for a given project object in a specific project. """
+    def get_subtasks(self, project_slug):
+        return self.call_api('/projects/%s/subtasks' % project_slug)
+
+    """ Displays subtask details. """
+    def get_subtask(self, project_slug, subtask_id):
+        return self.call_api('/projects/%s/subtasks/%s' % (project_slug, subtask_id))
 
     """ @todo
         - tasks
