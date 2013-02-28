@@ -14,7 +14,7 @@ class activeCollab(object):
         self.key = self.config['key']
         self.url = self.config['url']
         self.user_id = self.config['user_id']
-        if 'cache_location' in config:
+        if 'cache_location' in self.config:
             self.cache_location = self.config['cache_location']
 
     """ Make a call out to the activeCollab API. """
@@ -129,6 +129,15 @@ class activeCollab(object):
     """
     def get_archived_project_tasks(self, project_slug):
         return self.call_api('/projects/%s/tasks/archive' % project_slug)
+
+    """ Create a new task in the given project. """
+    def add_task(self, project_slug, name, body=None):
+        params = {
+            'task[name]' : name,
+            # 'task[body]' : body,
+            'submitted' : 'submitted'
+        }
+        return self.call_api('/projects/%s/tasks/add', params)
 
     """ Displays details for a specific task. """
     def get_task(self, project_slug, task_id):
