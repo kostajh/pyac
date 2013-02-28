@@ -2,6 +2,7 @@ import json
 import os
 import time
 import datetime
+import urllib
 import urllib2
 
 class activeCollab(object):
@@ -13,15 +14,19 @@ class activeCollab(object):
         self.key = self.config['key']
         self.url = self.config['url']
         self.user_id = self.config['user_id']
+        if 'cache_location' in config:
+            self.cache_location = self.config['cache_location']
 
-    def call_api(self, uri, cache=False):
+    """ Make a call out to the activeCollab API. """
+    def call_api(self, uri, params=None, cache=False):
         # @todo return results from cache
         url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" + uri + "&format=json"
-        req = urllib2.Request(url)
+        if params is not None:
+            req = urllib2.Request(url, urllib.urlencode(params))
+        else:
+            req = urllib2.Request(url)
         res = urllib2.urlopen(req)
         return json.loads(res.read())
-
-    """ GET requests """
 
     """ System Information.
         @see https://www.activecollab.com/docs/manuals/developers-version-3/api/system-information
@@ -151,6 +156,18 @@ class activeCollab(object):
     def get_status_messages(self):
         return self.call_api('status')
 
+    """ This command will submit a new status message.
+        Example request:
+            status_update[message]=New status message
+            submitted=submitted
+    """
+    def add_status_message(self, message):
+        params = {
+            'status_update[message]' : message,
+            'submitted' : 'submitted'
+        }
+        return self.call_api('status/add', params)
+
     """ Subtasks
         List of available subtask fields:
 
@@ -168,23 +185,6 @@ class activeCollab(object):
     """ Displays subtask details. """
     def get_subtask(self, project_slug, subtask_id):
         return self.call_api('/projects/%s/subtasks/%s' % (project_slug, subtask_id))
-
-    """ @todo
-        - tasks
-        - milestones
-        - discussions
-        - time and expenses
-        - status message
-        - Contexts
-            - categories
-            - subtasks
-            - comments
-            - attachments
-            - completion status
-            - reminders
-    """
-
-    """ POST requests """
 
     """ Helpers """
 
