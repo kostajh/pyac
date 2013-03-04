@@ -59,6 +59,16 @@ class activeCollab(object):
     def get_people(self):
         return self.call_api('people')
 
+    """ This command will create a new company. If operation was successful,
+        system will return details of the newly created company.
+    """
+    def add_company(self, name):
+        params = {
+            'status_update[name]' : name,
+            'submitted' : 'submitted'
+        }
+        return self.call_api('people/add-company', params)
+
     """ Displays the properties of a specific company. """
     def get_company(self, company_id):
         return self.call_api('people/%s' % company_id)
