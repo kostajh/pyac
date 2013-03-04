@@ -1,7 +1,5 @@
 import json
 import os
-import time
-import datetime
 import urllib
 import urllib2
 
@@ -10,7 +8,7 @@ class activeCollab(object):
 
     def __init__(self, config_filename="~/.acrc"):
         self.config_filename = config_filename
-        self.config = self._load_config()
+        self.config = self.load_config()
         self.key = self.config['key']
         self.url = self.config['url']
         self.user_id = self.config['user_id']
@@ -197,7 +195,7 @@ class activeCollab(object):
 
     """ Helpers """
 
-    def _load_config(self):
+    def load_config(self):
         """ Load ~/.acrc into a python dict
 
         >>> ac = activeCollab()
