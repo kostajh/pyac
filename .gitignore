@@ -7,4 +7,5 @@ build
 dist
 test.html
 *.pdf
+*.sublime-project
 
