@@ -199,7 +199,7 @@ class activeCollab(object):
             'time_record[job_type_id]' : job_type_id,
             'submitted' : 'submitted',
         }
-        return self.call_api('projects/%s/tasks/%s/tracking' % (project_id, task_id), params)
+        return self.call_api('projects/%s/tasks/%s/tracking/time/add' % (project_id, task_id), params)
 
     def get_time_record(self, project_id, record_id):
         """ Displays time record details. """
