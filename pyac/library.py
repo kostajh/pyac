@@ -169,6 +169,42 @@ class activeCollab(object):
     def get_discussion(self, project_slug, discussion_id):
         return self.call_api('/projects/%s/discussions/%s' % (project_slug, discussion_id))
 
+
+    """ Time & Expenses """
+
+    def get_times_and_expenses_by_project(self, project_id, limit=0):
+        """ This command will display last 300 time records and expenses in a
+            given project. If you wish to return all time records and expenses
+            from a project, set limit to 1.
+        """
+        return self.call_api('projects/%s/tracking&dont_limit_result=%s' % (project_id, limit))
+
+    def add_time_to_project(self, project_id, value, user_id, record_date, job_type_id):
+        """ Adds a new time record to the time log in a defined project. """
+        params = {
+            'time_record[value]' : value,
+            'time_record[user_id]' : user_id,
+            'time_record[record_date]' : record_date,
+            'time_record[job_type_id]' : job_type_id,
+            'submitted' : 'submitted',
+        }
+        return self.call_api('projects/%s/tracking/time/add' % project_id, params)
+
+    def add_time_to_task(self, project_id, task_id, value, user_id, record_date, job_type_id):
+        """ Adds a new time record to the time log in a defined project task. """
+        params = {
+            'time_record[value]' : value,
+            'time_record[user_id]' : user_id,
+            'time_record[record_date]' : record_date,
+            'time_record[job_type_id]' : job_type_id,
+            'submitted' : 'submitted',
+        }
+        return self.call_api('projects/%s/tasks/%s/tracking' % (project_id, task_id), params)
+
+    def get_time_record(self, project_id, record_id):
+        """ Displays time record details. """
+        return self.call_api('projects/%s/tracking/time/%s' % (project_id, record_id))
+
     """ Lists the 50 most recent status messages. """
     def get_status_messages(self):
         return self.call_api('status')
