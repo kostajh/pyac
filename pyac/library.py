@@ -190,13 +190,14 @@ class activeCollab(object):
         }
         return self.call_api('projects/%s/tracking/time/add' % project_id, params)
 
-    def add_time_to_task(self, project_id, task_id, value, user_id, record_date, job_type_id):
+    def add_time_to_task(self, project_id, task_id, value, user_id, record_date, job_type_id, billable_status):
         """ Adds a new time record to the time log in a defined project task. """
         params = {
             'time_record[value]' : value,
             'time_record[user_id]' : user_id,
             'time_record[record_date]' : record_date,
             'time_record[job_type_id]' : job_type_id,
+            'time_record[billable_status]' : billable_status,
             'submitted' : 'submitted',
         }
         return self.call_api('projects/%s/tasks/%s/tracking/time/add' % (project_id, task_id), params)
