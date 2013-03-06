@@ -7,6 +7,7 @@ setup(
   version='0.1.0',
   author='Kosta Harlan',
   author_email='kostajh@gmail.com',
+  url='https://github.com/kostajh/pyac',
   packages=['pyac'],
   license='LICENSE.txt',
   description='A library for activeCollab 3.x',
