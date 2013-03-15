@@ -241,6 +241,14 @@ class activeCollab(object):
     def get_subtask(self, project_slug, subtask_id):
         return self.call_api('/projects/%s/subtasks/%s' % (project_slug, subtask_id))
 
+    """ Comments """
+    def add_comment(self, context, message):
+        params = {
+            'comment[body]': message,
+            'submitted': 'submitted'
+        }
+        return self.call_api('%s/comments/add', params)
+
     """ Helpers """
 
     def load_config(self):
