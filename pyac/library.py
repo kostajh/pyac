@@ -147,6 +147,10 @@ class activeCollab(object):
         }
         return self.call_api('/projects/%s/tasks/add', params)
 
+    """ Complete task in the project. """
+    def complete_task(self, project_slug, task_id):
+        return self.call_api('/projects/%s/tasks/%s/complete' % (project_slug, task_id))
+
     """ Displays details for a specific task. """
     def get_task(self, project_slug, task_id):
         return self.call_api('/projects/%s/tasks/%s' % (project_slug, task_id))
