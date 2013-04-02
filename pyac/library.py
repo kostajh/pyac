@@ -253,6 +253,11 @@ class activeCollab(object):
         }
         return self.call_api('%s/comments/add', params)
 
+    """ Add comment to task. """
+    def add_comment_to_task(self, project_slug, task_id, message):
+        context = '/projects/%s/tasks/%s' % (project_slug, task_id)
+        return self.add_comment(context, message)
+
     """ Helpers """
 
     def load_config(self):
