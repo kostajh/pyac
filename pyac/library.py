@@ -149,7 +149,10 @@ class activeCollab(object):
 
     """ Complete task in the project. """
     def complete_task(self, project_slug, task_id):
-        return self.call_api('/projects/%s/tasks/%s/complete' % (project_slug, task_id))
+        params = {
+            'submitted' : 'submitted'
+        }
+        return self.call_api('/projects/%s/tasks/%s/complete' % (project_slug, task_id), params)
 
     """ Displays details for a specific task. """
     def get_task(self, project_slug, task_id):
@@ -251,7 +254,7 @@ class activeCollab(object):
             'comment[body]': message,
             'submitted': 'submitted'
         }
-        return self.call_api('%s/comments/add', params)
+        return self.call_api('%s/comments/add' % context, params)
 
     """ Add comment to task. """
     def add_comment_to_task(self, project_slug, task_id, message):
