@@ -6,14 +6,19 @@ import urllib2
 class activeCollab(object):
     """ A python object with methods for interacting with activeCollab 3.x """
 
-    def __init__(self, config_filename="~/.acrc"):
-        self.config_filename = config_filename
-        self.config = self.load_config()
-        self.key = self.config['key']
-        self.url = self.config['url']
-        self.user_id = self.config['user_id']
-        if 'cache_location' in self.config:
-            self.cache_location = self.config['cache_location']
+    def __init__(self, config_filename="~/.acrc", key=None, url=None, user_id=None):
+        if key is not None and url is not None and user_id is not None:
+            self.key = key
+            self.url = url
+            self.user_id = user_id
+        else:
+            self.config_filename = config_filename
+            self.config = self.load_config()
+            self.key = self.config['key']
+            self.url = self.config['url']
+            self.user_id = self.config['user_id']
+            if 'cache_location' in self.config:
+                self.cache_location = self.config['cache_location']
 
     """ Make a call out to the activeCollab API. """
     def call_api(self, uri, params=None, cache=False):
