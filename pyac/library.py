@@ -3,10 +3,12 @@ import os
 import urllib
 import urllib2
 
+
 class activeCollab(object):
     """ A python object with methods for interacting with activeCollab 3.x """
 
-    def __init__(self, config_filename="~/.acrc", key=None, url=None, user_id=None):
+    def __init__(self, config_filename="~/.acrc", key=None,
+                 url=None, user_id=None):
         if key is not None and url is not None and user_id is not None:
             self.key = key
             self.url = url
@@ -23,7 +25,8 @@ class activeCollab(object):
     """ Make a call out to the activeCollab API. """
     def call_api(self, uri, params=None, cache=False):
         # @todo return results from cache
-        url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" + uri + "&format=json"
+        url = self.url.rstrip("/") + "?auth_api_token=" + self.key
+        + "&path_info=" + uri + "&format=json"
         if params is not None:
             req = urllib2.Request(url, urllib.urlencode(params))
         else:
@@ -31,9 +34,7 @@ class activeCollab(object):
         res = urllib2.urlopen(req)
         return json.loads(res.read())
 
-    """ System Information.
-        @see https://www.activecollab.com/docs/manuals/developers-version-3/api/system-information
-    """
+    """ System Information. """
 
     """ Returns system information about the installation you are working with.
         This information includes system versions; info about logged in users;
@@ -69,8 +70,8 @@ class activeCollab(object):
     """
     def add_company(self, name):
         params = {
-            'status_update[name]' : name,
-            'submitted' : 'submitted'
+            'status_update[name]': name,
+            'submitted': 'submitted'
         }
         return self.call_api('people/add-company', params)
 
@@ -82,10 +83,11 @@ class activeCollab(object):
     def get_user(self, company_id, user_id):
         return self.call_api('people/%s/users/%s' % (company_id, user_id))
 
-    """ Display all, non-archived projects that this user has access to. In case
-        of administrators and project managers, system will return all non-archived
-        projects and properly populate is_member flag value (when 0, administrator
-        and project manager can see and manage the project, but they are not
+    """ Display all, non-archived projects that this user has access to.
+        In case of administrators and project managers, system will return
+        all non-archived projects and properly populate is_member flag value
+        (when 0, administrator and project manager can see and manage the
+        project, but they are not
         directly involved with it).
     """
     def get_projects(self):
@@ -119,13 +121,16 @@ class activeCollab(object):
     """ Tasks
     Task fields:
 
-        name (string) - Task name. A value for this field is required when a Task is created,
+        name (string) - Task name. A value for this field is required when
+        a Task is created,
         body (text) - Full task description,
-        visibility (integer) - Object visibility. 0 is private and 1 is normal visibility,
+        visibility (integer) - Object visibility. 0 is private and 1 is normal
+        visibility,
         category_id (integer) - Object category,
         label_id (integer) - Object label,
         milestone_id (integer) - ID of the parent milestone,
-        priority (integer) - Priority can have one of five integer values, ranging from -2 (lowest) to 2 (highest). 0 is normal,
+        priority (integer) - Priority can have one of five integer values,
+        ranging from -2 (lowest) to 2 (highest). 0 is normal,
         assignee_id (integer) - User assigned to the Task,
         other_assignees (array) - People assigned to the Task,
         due_on (date) - Task due date,``
@@ -146,18 +151,19 @@ class activeCollab(object):
     """ Create a new task in the given project. """
     def add_task(self, project_slug, name, body=None):
         params = {
-            'task[name]' : name,
-            # 'task[body]' : body,
-            'submitted' : 'submitted'
+            'task[name]': name,
+            'task[body]': body,
+            'submitted': 'submitted'
         }
         return self.call_api('/projects/%s/tasks/add', params)
 
     """ Complete task in the project. """
     def complete_task(self, project_slug, task_id):
         params = {
-            'submitted' : 'submitted'
+            'submitted': 'submitted'
         }
-        return self.call_api('/projects/%s/tasks/%s/complete' % (project_slug, task_id), params)
+        return self.call_api('/projects/%s/tasks/%s/complete' %
+                            (project_slug, task_id), params)
 
     """ Displays details for a specific task. """
     def get_task(self, project_slug, task_id):
@@ -166,10 +172,12 @@ class activeCollab(object):
     """ discussions
         Discussion fields:
 
-        name (string) - Discussion topic. This field is required when topic is created,
+        name (string) - Discussion topic. This field is required when topic
+        is created,
         body (string) - First message body (required),
         category_id (integer) - Discussion category id,
-        visibility (integer) - Discussion visibility. 0 is private and 1 is normal visibility,
+        visibility (integer) - Discussion visibility. 0 is private and 1 is
+        normal visibility,
         milestone_id (integer) - ID of parent milestone.
     """
 
@@ -179,45 +187,52 @@ class activeCollab(object):
 
     """ Display discussion details. """
     def get_discussion(self, project_slug, discussion_id):
-        return self.call_api('/projects/%s/discussions/%s' % (project_slug, discussion_id))
-
+        return self.call_api('/projects/%s/discussions/%s' %
+                            (project_slug, discussion_id))
 
     """ Time & Expenses """
-
     def get_times_and_expenses_by_project(self, project_id, limit=0):
         """ This command will display last 300 time records and expenses in a
             given project. If you wish to return all time records and expenses
             from a project, set limit to 1.
         """
-        return self.call_api('projects/%s/tracking&dont_limit_result=%s' % (project_id, limit))
+        return self.call_api('projects/%s/tracking&dont_limit_result=%s' %
+                            (project_id, limit))
 
-    def add_time_to_project(self, project_id, value, user_id, record_date, job_type_id):
+    def add_time_to_project(self, project_id, value, user_id, record_date,
+                            job_type_id):
         """ Adds a new time record to the time log in a defined project. """
         params = {
-            'time_record[value]' : value,
-            'time_record[user_id]' : user_id,
-            'time_record[record_date]' : record_date,
-            'time_record[job_type_id]' : job_type_id,
-            'submitted' : 'submitted',
+            'time_record[value]': value,
+            'time_record[user_id]': user_id,
+            'time_record[record_date]': record_date,
+            'time_record[job_type_id]': job_type_id,
+            'submitted': 'submitted',
         }
-        return self.call_api('projects/%s/tracking/time/add' % project_id, params)
+        return self.call_api('projects/%s/tracking/time/add' %
+                             project_id, params)
 
-    def add_time_to_task(self, project_id, task_id, value, user_id, record_date, job_type_id, billable_status, summary):
-        """ Adds a new time record to the time log in a defined project task. """
+    def add_time_to_task(self, project_id, task_id, value, user_id,
+                         record_date, job_type_id, billable_status, summary):
+        """ Adds a new time record to the time log in a defined project
+            task.
+        """
         params = {
-            'time_record[value]' : value,
-            'time_record[user_id]' : user_id,
-            'time_record[record_date]' : record_date,
-            'time_record[job_type_id]' : job_type_id,
-            'time_record[billable_status]' : billable_status,
-            'time_record[summary]' : summary,
-            'submitted' : 'submitted',
+            'time_record[value]': value,
+            'time_record[user_id]': user_id,
+            'time_record[record_date]': record_date,
+            'time_record[job_type_id]': job_type_id,
+            'time_record[billable_status]': billable_status,
+            'time_record[summary]': summary,
+            'submitted': 'submitted',
         }
-        return self.call_api('projects/%s/tasks/%s/tracking/time/add' % (project_id, task_id), params)
+        return self.call_api('projects/%s/tasks/%s/tracking/time/add' %
+                            (project_id, task_id), params)
 
     def get_time_record(self, project_id, record_id):
         """ Displays time record details. """
-        return self.call_api('projects/%s/tracking/time/%s' % (project_id, record_id))
+        return self.call_api('projects/%s/tracking/time/%s' %
+                            (project_id, record_id))
 
     """ Lists the 50 most recent status messages. """
     def get_status_messages(self):
@@ -230,28 +245,33 @@ class activeCollab(object):
     """
     def add_status_message(self, message):
         params = {
-            'status_update[message]' : message,
-            'submitted' : 'submitted'
+            'status_update[message]': message,
+            'submitted': 'submitted'
         }
         return self.call_api('status/add', params)
 
     """ Subtasks
         List of available subtask fields:
 
-        body (text) - The subtasktask name. A value for this field is required when a new task is added;
+        body (text) - The subtasktask name. A value for this field is required
+        when a new task is added;
         assignee (integer) - Person assigned to the object.
-        priority (integer) - Priority can have five integer values ranging from -2 (lowest) to 2 (highest). 0 is normal;
+        priority (integer) - Priority can have five integer values ranging from
+        -2 (lowest) to 2 (highest). 0 is normal;
         label_id (date) - Label id of the subtask;
         due_on (date) - When the subtask is due;
     """
 
-    """ Displays all subtasks for a given project object in a specific project. """
+    """ Displays all subtasks for a given project object in a specific
+        project.
+    """
     def get_subtasks(self, project_slug):
         return self.call_api('/projects/%s/subtasks' % project_slug)
 
     """ Displays subtask details. """
     def get_subtask(self, project_slug, subtask_id):
-        return self.call_api('/projects/%s/subtasks/%s' % (project_slug, subtask_id))
+        return self.call_api('/projects/%s/subtasks/%s' %
+                            (project_slug, subtask_id))
 
     """ Comments """
     def add_comment(self, context, message):
@@ -265,6 +285,10 @@ class activeCollab(object):
     def add_comment_to_task(self, project_slug, task_id, message):
         context = '/projects/%s/tasks/%s' % (project_slug, task_id)
         return self.add_comment(context, message)
+
+    def get_comments(self, project_slug, task_id):
+        return self.call_api('/projects/%s/tasks/%s/comments' %
+                            (project_slug, task_id))
 
     """ Helpers """
 
