@@ -25,8 +25,7 @@ class activeCollab(object):
     """ Make a call out to the activeCollab API. """
     def call_api(self, uri, params=None, cache=False):
         # @todo return results from cache
-        url = self.url.rstrip("/") + "?auth_api_token=" + self.key
-        + "&path_info=" + uri + "&format=json"
+        url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" + uri + "&format=json"
         if params is not None:
             req = urllib2.Request(url, urllib.urlencode(params))
         else:
