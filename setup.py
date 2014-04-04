@@ -4,9 +4,9 @@ from distutils.core import setup
 
 setup(
   name='pyac',
-  version='0.1.1',
+  version='0.1.2',
   author='Kosta Harlan',
-  author_email='kostajh@gmail.com',
+  author_email='kosta@harlan.mayfirst.org',
   url='https://github.com/kostajh/pyac',
   packages=['pyac'],
   license='LICENSE.txt',
