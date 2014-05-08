@@ -135,6 +135,11 @@ class activeCollab(object):
         due_on (date) - Task due date,``
     """
 
+    """ Get all tasks for the authenticated user.
+    """
+    def get_my_tasks(self):
+        return self.call_api('/my-tasks')
+
     """ Lists all open and completed, non-archived tasks from a project.
         project_slug can be a project ID.
     """
