@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
   name='pyac',
-  version='0.1.3',
+  version='0.1.4',
   author='Kosta Harlan',
   author_email='kosta@harlan.mayfirst.org',
   url='https://github.com/kostajh/pyac',
