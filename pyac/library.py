@@ -25,7 +25,8 @@ class activeCollab(object):
     """ Make a call out to the activeCollab API. """
     def call_api(self, uri, params=None, cache=False):
         # @todo return results from cache
-        url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" + uri + "&format=json"
+        url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" \
+            + uri + "&format=json"
         if params is not None:
             req = urllib2.Request(url, urllib.urlencode(params))
         else:
@@ -167,7 +168,7 @@ class activeCollab(object):
             'submitted': 'submitted'
         }
         return self.call_api('/projects/%s/tasks/%s/complete' %
-                            (project_slug, task_id), params)
+                             (project_slug, task_id), params)
 
     """ Displays details for a specific task. """
     def get_task(self, project_slug, task_id):
@@ -192,7 +193,7 @@ class activeCollab(object):
     """ Display discussion details. """
     def get_discussion(self, project_slug, discussion_id):
         return self.call_api('/projects/%s/discussions/%s' %
-                            (project_slug, discussion_id))
+                             (project_slug, discussion_id))
 
     """ Time & Expenses """
     def get_times_and_expenses_by_project(self, project_id, limit=0):
@@ -201,7 +202,7 @@ class activeCollab(object):
             from a project, set limit to 1.
         """
         return self.call_api('projects/%s/tracking&dont_limit_result=%s' %
-                            (project_id, limit))
+                             (project_id, limit))
 
     def add_time_to_project(self, project_id, value, user_id, record_date,
                             job_type_id):
@@ -231,12 +232,12 @@ class activeCollab(object):
             'submitted': 'submitted',
         }
         return self.call_api('projects/%s/tasks/%s/tracking/time/add' %
-                            (project_id, task_id), params)
+                             (project_id, task_id), params)
 
     def get_time_record(self, project_id, record_id):
         """ Displays time record details. """
         return self.call_api('projects/%s/tracking/time/%s' %
-                            (project_id, record_id))
+                             (project_id, record_id))
 
     """ Lists the 50 most recent status messages. """
     def get_status_messages(self):
@@ -275,7 +276,7 @@ class activeCollab(object):
     """ Displays subtask details. """
     def get_subtask(self, project_slug, subtask_id):
         return self.call_api('/projects/%s/subtasks/%s' %
-                            (project_slug, subtask_id))
+                             (project_slug, subtask_id))
 
     """ Comments """
     def add_comment(self, context, message):
@@ -292,7 +293,7 @@ class activeCollab(object):
 
     def get_comments(self, project_slug, task_id):
         return self.call_api('/projects/%s/tasks/%s/comments' %
-                            (project_slug, task_id))
+                             (project_slug, task_id))
 
     """ Helpers """
 
