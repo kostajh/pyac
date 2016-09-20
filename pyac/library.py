@@ -1,7 +1,10 @@
 import json
 import os
 import urllib
-import urllib2
+try:
+    from urllib2 import Request, urlopen
+except ImportError:
+    from urllib.request import Request, urlopen
 
 
 class activeCollab(object):
@@ -28,10 +31,10 @@ class activeCollab(object):
         url = self.url.rstrip("/") + "?auth_api_token=" + self.key + "&path_info=" \
             + uri + "&format=json"
         if params is not None:
-            req = urllib2.Request(url, urllib.urlencode(params))
+            req = Request(url, urllib.urlencode(params))
         else:
-            req = urllib2.Request(url)
-        res = urllib2.urlopen(req)
+            req = Request(url)
+        res = urlopen(req)
         return json.loads(res.read())
 
     """ System Information. """
